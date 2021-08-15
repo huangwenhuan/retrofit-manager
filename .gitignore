@@ -1,0 +1,40 @@
+#IntelliJ IDEA project files and directories
+*.iml
+*.ipr
+*.iws
+.idea/
+!.idea/codeStyles/Project.xml
+!.idea/codeStyles/codeStyleConfig.xml
+!.idea/copyright/huangwenhuan.xml
+!.idea/copyright/profiles_settings.xml
+
+# Built application files
+.externalNativeBuild
+*.apk
+*.ap_
+concorde.gradle
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Mac-specific directory that no other operating system needs.
+.DS_Store
+
+# JVM crash logs
+hs_err_pid*.log
+
+# Log Files
+*.log
+
+# Sonar
+.sonar
