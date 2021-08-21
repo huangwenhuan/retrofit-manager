@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap
 internal object RMStore {
   private val name2RM: ConcurrentMap<String?, in RetrofitManager> = ConcurrentHashMap(4)
 
-  fun generateKey(clazz: Class<out RetrofitManager?>): String? {
+  fun generateKey(clazz: Class<out RetrofitManager?>): String {
     val cache = nameCaches.get()
     val retrofitManagerClazz: Class<*> = clazz
     var name: String?
@@ -53,7 +53,7 @@ internal object RMStore {
         }
       }
     }
-    return name
+    return requireNotNull(name) { "com.huangwenhuan.retrofit.manager.RMStore#generateKey(${clazz.name}) must note be null" }
   }
 
   fun put(manager: RetrofitManager) {
@@ -88,8 +88,12 @@ internal object RMStore {
   //////
   //////
 
-  @JvmOverloads fun tryReviseName(clazz: Class<out RetrofitManager?>, name: String? = null): String? {
-    return if (!Util.isEmpty(name) && findRetrofitManager<RetrofitManager?>(name) == null) {
+  @JvmOverloads
+  fun tryReviseName(
+    clazz: Class<out RetrofitManager?>,
+    name: String? = null
+  ): String {
+    return if (!name.isNullOrEmpty() && findRetrofitManager<RetrofitManager?>(name) == null) {
       name
     } else {
       generateKey(clazz)

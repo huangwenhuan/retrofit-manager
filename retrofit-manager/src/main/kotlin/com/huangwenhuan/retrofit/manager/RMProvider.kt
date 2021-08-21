@@ -17,7 +17,7 @@
 package com.huangwenhuan.retrofit.manager
 
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit.Builder
+import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -25,7 +25,7 @@ class RMProvider internal constructor(
   private val key: String,
   private val factory: Factory,
   private val rmStore: RMStore,
-  private val mNProviderManager: RMProviderManager
+  private val rmProviderManager: RMProviderManager
 ) {
   /**
    * Implementations of `Factory` interface are responsible to instantiate
@@ -36,37 +36,31 @@ class RMProvider internal constructor(
   }
 
   fun <T : RetrofitManager?> get(): T {
-    val key = key
-    var manager = rmStore.findRetrofitManager<RetrofitManager>(key)
-    return if (manager != null) {
-      mNProviderManager.onNNetworkSelected(key, manager)
-      manager as T
-    } else {
-      manager = factory.create(key)
-      mNProviderManager.onNNetworkCreated(key, manager!!)
-      manager as T
-    }
+    val manager =
+      rmStore.findRetrofitManager<RetrofitManager>(key) ?: factory.create<RetrofitManager>(key)
+    rmProviderManager.onNNetworkCreated(key, manager)
+    return manager as T
   }
 
-  class DefaultFactory(private val baseUrl: String) : Factory {
+  open class DefaultRetrofitManagerFactory(
+    private val baseUrl: String
+  ) : Factory {
     override fun <T : RetrofitManager?> create(key: String): T {
       val builder = RetrofitManager.Builder()
-        .setRetrofit(getRetrofit(baseUrl))
+        .setRetrofitBuilder(retrofitBuilder)
         .setOkHttpClient(okHttpClient)
         .setName(key)
         .setBaseUrl(baseUrl)
       return builder.build() as T
     }
 
-    protected fun getRetrofit(baseUrl: String?): Builder {
-      return Builder()
+    protected open val retrofitBuilder: Retrofit.Builder
+      get() = Retrofit.Builder()
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(baseUrl!!)
-    }
+        .baseUrl(baseUrl)
 
-    protected val okHttpClient: OkHttpClient?
-      protected get() = null
-
+    protected open val okHttpClient: OkHttpClient?
+      get() = null
   }
 }

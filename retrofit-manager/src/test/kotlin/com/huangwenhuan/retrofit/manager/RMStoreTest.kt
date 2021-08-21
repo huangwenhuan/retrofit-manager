@@ -17,7 +17,7 @@
 package com.huangwenhuan.retrofit.manager
 
 import com.google.common.truth.Truth
-import com.huangwenhuan.retrofit.manager.RMProvider.DefaultFactory
+import com.huangwenhuan.retrofit.manager.RMProvider.DefaultRetrofitManagerFactory
 import com.huangwenhuan.retrofit.manager.Util.simpleClassName
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +29,7 @@ class RMStoreTest {
   }
 
   @Test fun testGenerateName0() {
-    val retrofitManager = RetrofitManager(null, null)
+    val retrofitManager = RetrofitManager(null, "retrofit.manager.DEFAULT_KEY")
     val prefix = simpleClassName(RetrofitManager::class.java)
     while (true) {
       val name = RMStore.generateKey(RetrofitManager::class.java)
@@ -52,7 +52,7 @@ class RMStoreTest {
     while (true) {
       val retrofitManager: RetrofitManager =
         RetrofitManager.Builder()
-          .setRetrofit(retrofit.newBuilder()).setName("RetrofitManager/Default")
+          .setRetrofitBuilder(retrofit.newBuilder()).setName("RetrofitManager/Default")
           .build()
       val manager: RetrofitManager? = RMStore.findRetrofitManager(retrofitManager.key())
       Truth.assertThat(manager).isEqualTo(retrofitManager)
@@ -64,7 +64,7 @@ class RMStoreTest {
 
   @Test fun testRMProvider() {
     val key = "RetrofitManager"
-    RetrofitManager.registerProvider(key, DefaultFactory("https://httpbin.org"))
+    RetrofitManager.registerProvider(key, DefaultRetrofitManagerFactory("https://httpbin.org"))
     Truth.assertThat(RMProviderManager.with(key).get<RetrofitManager>().key()).isEqualTo(key)
   }
 }

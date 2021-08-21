@@ -1,3 +1,3 @@
 rootProject.name = "retrofit-manager-parent"
 
-include ':retrofit-manager'
+include(":retrofit-manager")

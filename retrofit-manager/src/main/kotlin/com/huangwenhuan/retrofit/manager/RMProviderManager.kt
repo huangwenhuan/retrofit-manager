@@ -28,6 +28,9 @@ internal object RMProviderManager {
   internal var debug = false
   internal var listener: Listener? = DefaultListener
 
+  @JvmOverloads
+  fun with(key: String = default_key): RMProvider = getProvider(key)
+
   @Synchronized fun registerProvider(factory: Factory?) {
     registerProvider(default_key, factory)
   }
@@ -66,20 +69,19 @@ internal object RMProviderManager {
   }
 
   fun onKeyAdded(key: String, value: RMProvider) {
-    if (debug && listener != null) listener!!.onProviderAdded(key, value)
+    if (debug) listener?.let { it.onProviderAdded(key, value) }
   }
 
   fun onKeyDuplicate(key: String, value: RMProvider) {
-    if (debug && listener != null) listener!!.onProviderDuplicate(key, value)
+    if (debug) listener?.let { it.onProviderDuplicate(key, value) }
   }
 
   fun onNNetworkSelected(key: String, network: RetrofitManager) {
-    if (debug && listener != null) listener!!.onNNetworkSelected(key, network)
+    if (debug) listener?.let { it.onNNetworkSelected(key, network) }
   }
 
   fun onNNetworkCreated(key: String, network: RetrofitManager) {
-    if (debug && listener != null) listener!!.onNNetworkCreated(key, network)
+    if (debug) listener?.let { it.onNNetworkCreated(key, network) }
   }
 
-  @JvmOverloads fun with(key: String = default_key): RMProvider = getProvider(key)
 }

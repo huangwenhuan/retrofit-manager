@@ -22,7 +22,8 @@ import retrofit2.Retrofit
 import java.util.WeakHashMap
 
 class RetrofitManager internal constructor(
-  val retrofit: Retrofit?, val name: String?
+  val retrofit: Retrofit?,
+  val name: String
 ) {
   /** Callbacks for NNetwork register events.  */
   interface Listener {
@@ -34,7 +35,11 @@ class RetrofitManager internal constructor(
 
   private val instanceStore: Store
 
-  fun key(): String? = name
+  init {
+    instanceStore = Store()
+  }
+
+  fun key(): String = name
 
   fun newBuilder(): Builder {
     return Builder(this)
@@ -49,54 +54,47 @@ class RetrofitManager internal constructor(
     return instance
   }
 
-  class Builder {
-    private var retrofit: Retrofit.Builder? = null
+  class Builder constructor() {
+    private var retrofitBuilder: Retrofit.Builder? = null
     private var okHttpClient: OkHttpClient? = null
     private var baseUrl: String? = null
     private var name: String? = null
 
-    constructor() {}
-    internal constructor(manager: RetrofitManager) {
-      retrofit = manager.retrofit?.newBuilder()
+    internal constructor(manager: RetrofitManager) : this() {
+      retrofitBuilder = manager.retrofit?.newBuilder()
     }
 
-    fun setRetrofit(retrofit: Retrofit.Builder?): Builder {
-      this.retrofit = retrofit
-      return this
+    fun setRetrofitBuilder(builder: Retrofit.Builder?): Builder = apply {
+      this.retrofitBuilder = builder
     }
 
-    fun setOkHttpClient(okHttpClient: OkHttpClient?): Builder {
+    fun setOkHttpClient(okHttpClient: OkHttpClient?): Builder = apply {
       this.okHttpClient = okHttpClient
-      return this
     }
 
-    fun setBaseUrl(baseUrl: String?): Builder {
+    fun setBaseUrl(baseUrl: String): Builder = apply {
       this.baseUrl = baseUrl
-      return this
     }
 
-    fun setName(name: String?): Builder {
+    fun setName(name: String): Builder = apply {
       this.name = name
-      return this
     }
 
     fun build(): RetrofitManager {
-      checkNotNull(retrofit) { "Retrofit required." }
-      if (okHttpClient != null) {
-        retrofit = retrofit!!.client(okHttpClient!!)
-      }
-      if (baseUrl != null) {
-        retrofit = retrofit!!.baseUrl(baseUrl!!)
-      }
+      val retrofitBuilder = checkNotNull(retrofitBuilder) { "Retrofit required." }
+        .apply {
+          okHttpClient?.let { client(it) }
+          baseUrl?.let { baseUrl(it) }
+        }
       name = RMStore.tryReviseName(RetrofitManager::class.java, name)
-      val retrofitManager = RetrofitManager(retrofit!!.build(), name)
+      val retrofitManager = RetrofitManager(retrofitBuilder.build(), requireNotNull(name))
       RMStore.putIfAbsent(retrofitManager)
       return retrofitManager
     }
   }
 
-  internal class Store {
-    val mThreadLocal: ThreadLocal<MutableMap<Class<*>, Any?>> =
+  private class Store {
+    private val threadLocal: ThreadLocal<MutableMap<Class<*>, Any?>> =
       object : ThreadLocal<MutableMap<Class<*>, Any?>>() {
         override fun initialValue(): MutableMap<Class<*>, Any?> {
           return WeakHashMap()
@@ -104,41 +102,52 @@ class RetrofitManager internal constructor(
       }
 
     fun <T> put(key: Class<T>, instance: Any?) {
-      mThreadLocal.get()[key] = instance
+      threadLocal.get()[key] = instance
     }
 
     operator fun <T> get(key: Class<T>): T? {
-      return mThreadLocal.get()[key] as T?
+      return threadLocal.get()[key] as T?
     }
   }
 
   companion object {
-    @JvmStatic fun with(): RetrofitManager? {
+    @JvmStatic
+    fun with(): RetrofitManager? {
       return RMProviderManager.with().get()
     }
 
-    @JvmStatic fun with(key: String): RetrofitManager {
+    @JvmStatic
+    fun with(key: String): RetrofitManager {
       return requireNotNull(RMProviderManager.with(key).get()) {
       }
     }
 
-    @JvmStatic @Synchronized fun registerProvider(factory: Factory) {
+    @JvmStatic
+    @Synchronized
+    fun registerProvider(factory: Factory) {
       RMProviderManager.registerProvider(factory)
     }
 
-    @JvmStatic @Synchronized fun registerProvider(key: String, factory: Factory) {
+    @JvmStatic
+    @Synchronized
+    fun registerProvider(key: String, factory: Factory) {
       RMProviderManager.registerProvider(key, factory)
     }
 
-    @JvmStatic @Synchronized fun unregisterProvider() {
+    @JvmStatic
+    @Synchronized
+    fun unregisterProvider() {
       RMProviderManager.unregisterProvider()
     }
 
-    @JvmStatic @Synchronized fun unregisterProvider(key: String) {
+    @JvmStatic
+    @Synchronized
+    fun unregisterProvider(key: String) {
       RMProviderManager.unregisterProvider(key)
     }
 
-    @JvmStatic var isDebug: Boolean
+    @JvmStatic
+    var isDebug: Boolean
       set(value) {
         RMProviderManager.debug = value
       }
@@ -146,12 +155,9 @@ class RetrofitManager internal constructor(
 
     @JvmStatic var listener: Listener?
       set(value) {
-        RMProviderManager.listener = listener
+        RMProviderManager.listener = value
       }
       get() = RMProviderManager.listener
   }
 
-  init {
-    instanceStore = Store()
-  }
 }
