@@ -21,25 +21,25 @@ import com.huangwenhuan.retrofit.manager.RetrofitManager.Listener
 
 internal object DefaultListener : Listener {
   override fun onProviderAdded(key: String, value: RMProvider) {
-    Util.log(Util.INFO, String.format("The key %s is added", key), null)
+    Util.log(Util.INFO, String.format("The key [%s] is added", key), null)
   }
 
   override fun onProviderDuplicate(key: String, value: RMProvider) {
-    Util.log(Util.INFO, String.format("The key %s is duplicated", key), null)
+    Util.log(Util.INFO, String.format("The key [%s] is duplicated", key), null)
   }
 
-  override fun onNNetworkSelected(key: String, network: RetrofitManager) {
+  override fun onRetrofitManagerSelected(key: String, network: RetrofitManager) {
     Util.log(
       Util.INFO,
-      String.format("The key %s is selected, NNetwork = %s", key, network.toString()),
+      String.format("The key [%s] is selected, RetrofitManager = %s", key, network.toString()),
       null
     )
   }
 
-  override fun onNNetworkCreated(key: String, network: RetrofitManager) {
+  override fun onRetrofitManagerCreated(key: String, network: RetrofitManager) {
     Util.log(
       Util.INFO,
-      String.format("The key %s is selected, NNetwork = %s", key, network.toString()),
+      String.format("The key [%s] is selected, RetrofitManager = %s", key, network.toString()),
       null
     )
   }

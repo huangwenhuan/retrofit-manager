@@ -36,10 +36,13 @@ class RMProvider internal constructor(
   }
 
   fun <T : RetrofitManager?> get(): T {
-    val manager =
-      rmStore.findRetrofitManager<RetrofitManager>(key) ?: factory.create<RetrofitManager>(key)
-    rmProviderManager.onNNetworkCreated(key, manager)
-    return manager as T
+    return rmStore.findRetrofitManager<RetrofitManager>(key)?.let {
+      rmProviderManager.onRetrofitManagerSelected(key, it)
+      it as T
+    } ?: factory.create<RetrofitManager>(key).let {
+      rmProviderManager.onRetrofitManagerCreated(key, it)
+      it as T
+    }
   }
 
   open class DefaultRetrofitManagerFactory(

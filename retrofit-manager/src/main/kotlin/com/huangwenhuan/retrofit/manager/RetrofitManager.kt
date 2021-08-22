@@ -25,12 +25,12 @@ class RetrofitManager internal constructor(
   val retrofit: Retrofit?,
   val name: String
 ) {
-  /** Callbacks for NNetwork register events.  */
+  /** Callbacks for RetrofitManager register events.  */
   interface Listener {
     fun onProviderAdded(key: String, value: RMProvider)
     fun onProviderDuplicate(key: String, value: RMProvider)
-    fun onNNetworkSelected(key: String, network: RetrofitManager)
-    fun onNNetworkCreated(key: String, network: RetrofitManager)
+    fun onRetrofitManagerSelected(key: String, network: RetrofitManager)
+    fun onRetrofitManagerCreated(key: String, network: RetrofitManager)
   }
 
   private val instanceStore: Store

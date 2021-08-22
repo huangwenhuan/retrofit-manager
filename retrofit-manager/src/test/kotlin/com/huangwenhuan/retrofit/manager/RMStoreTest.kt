@@ -19,13 +19,19 @@ package com.huangwenhuan.retrofit.manager
 import com.google.common.truth.Truth
 import com.huangwenhuan.retrofit.manager.RMProvider.DefaultRetrofitManagerFactory
 import com.huangwenhuan.retrofit.manager.Util.simpleClassName
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit.Builder
 
 class RMStoreTest {
   @Before fun before() {
+    RetrofitManager.isDebug = true
     RMStore.clear()
+  }
+
+  @After fun after() {
+    RetrofitManager.isDebug = false
   }
 
   @Test fun testGenerateName0() {

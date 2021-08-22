@@ -58,30 +58,30 @@ internal object RMProviderManager {
     var v = target[key]
     if (v == null) {
       v = target.put(key, value)
-      onKeyAdded(key, value)
+      onProviderAdded(key, value)
     } else {
       try {
-        onKeyDuplicate(key, value)
+        onProviderDuplicate(key, value)
       } catch (e: Exception) {
       }
     }
     return v
   }
 
-  fun onKeyAdded(key: String, value: RMProvider) {
+  fun onProviderAdded(key: String, value: RMProvider) {
     if (debug) listener?.let { it.onProviderAdded(key, value) }
   }
 
-  fun onKeyDuplicate(key: String, value: RMProvider) {
+  fun onProviderDuplicate(key: String, value: RMProvider) {
     if (debug) listener?.let { it.onProviderDuplicate(key, value) }
   }
 
-  fun onNNetworkSelected(key: String, network: RetrofitManager) {
-    if (debug) listener?.let { it.onNNetworkSelected(key, network) }
+  fun onRetrofitManagerSelected(key: String, network: RetrofitManager) {
+    if (debug) listener?.let { it.onRetrofitManagerSelected(key, network) }
   }
 
-  fun onNNetworkCreated(key: String, network: RetrofitManager) {
-    if (debug) listener?.let { it.onNNetworkCreated(key, network) }
+  fun onRetrofitManagerCreated(key: String, network: RetrofitManager) {
+    if (debug) listener?.let { it.onRetrofitManagerCreated(key, network) }
   }
 
 }
