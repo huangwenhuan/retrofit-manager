@@ -13,7 +13,7 @@
 4. Commit
 
    ```
-   $ git commit -am "Prepare version X.Y.X"
+   $ git commit -am "Prepare for release X.Y.X"
    ```
 
 5. Tag

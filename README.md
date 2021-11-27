@@ -8,8 +8,10 @@ Download
 --------
 
 ```groovy
-implementation 'com.huangwenhuan:retrofit-manager:1.0.0-SNAPSHOT'
+implementation 'com.huangwenhuan:retrofit-manager:1.0.0'
 ```
+
+Download [the latest JAR][2] or grab from Maven central at the coordinates `com.huangwenhuan:retrofit-manager:1.0.0`.
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
 
@@ -35,4 +37,5 @@ License
 
 
 
+ [2]: https://search.maven.org/remote_content?g=com.squareup.retrofit2&a=retrofit&v=LATEST
  [snap]: https://s01.oss.sonatype.org/content/repositories/snapshots/
