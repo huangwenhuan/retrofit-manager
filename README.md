@@ -37,5 +37,5 @@ License
 
 
 
- [2]: https://search.maven.org/remote_content?g=com.squareup.retrofit2&a=retrofit&v=LATEST
+ [2]: https://search.maven.org/remote_content?g=com.huangwenhuan&a=retrofit-manager&v=LATEST
  [snap]: https://s01.oss.sonatype.org/content/repositories/snapshots/
