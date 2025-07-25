@@ -17,6 +17,7 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.vanniktech.maven.publish.SonatypeHost.S01
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   id("java-library")
@@ -30,8 +31,11 @@ java {
 }
 
 tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_1_8)
+    freeCompilerArgs = listOf(
+      "-Xjvm-default=all",
+    )
   }
 }
 

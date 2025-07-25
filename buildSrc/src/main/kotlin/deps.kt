@@ -58,10 +58,10 @@ object deps {
   }
 
   object retrofit {
-    const val rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
-    const val adapterRxjava3 = "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
-    const val gson = "com.squareup.retrofit2:converter-gson:2.9.0"
-    const val runtime = "com.squareup.retrofit2:retrofit:2.9.0"
+    const val rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:3.0.0"
+    const val adapterRxjava3 = "com.squareup.retrofit2:adapter-rxjava3:3.0.0"
+    const val gson = "com.squareup.retrofit2:converter-gson:3.0.0"
+    const val runtime = "com.squareup.retrofit2:retrofit:3.0.0"
   }
 
   object robolectric {
