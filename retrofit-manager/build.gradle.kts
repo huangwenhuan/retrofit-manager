@@ -16,7 +16,6 @@
  */
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.vanniktech.maven.publish.SonatypeHost.S01
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -37,10 +36,6 @@ tasks.withType<KotlinCompile> {
       "-Xjvm-default=all",
     )
   }
-}
-
-mavenPublishing {
-  publishToMavenCentral(S01)
 }
 
 dependencies {
