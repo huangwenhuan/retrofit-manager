@@ -9,7 +9,7 @@ buildscript {
   dependencies {
     classpath("com.android.tools.build:gradle:8.11.1")
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0")
-    classpath("com.vanniktech:gradle-maven-publish-plugin:0.17.0")
+    classpath("com.vanniktech:gradle-maven-publish-plugin:0.34.0")
   }
 }
 
