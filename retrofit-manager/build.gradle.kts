@@ -38,6 +38,10 @@ tasks.withType<KotlinCompile> {
   }
 }
 
+mavenPublishing {
+  publishToMavenCentral(true)
+}
+
 dependencies {
   implementation(deps.retrofit.runtime)
   implementation(deps.retrofit.gson)
